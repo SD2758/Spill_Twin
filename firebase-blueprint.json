@@ -1,0 +1,75 @@
+{
+  "entities": {
+    "EarlyWarningAlert": {
+      "title": "EarlyWarningAlert",
+      "description": "Satellite SAR detected oil spill incident alert",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "alertCode": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "formattedTime": { "type": "string" },
+        "severity": { "type": "string" },
+        "sectorName": { "type": "string" },
+        "satellite": { "type": "string" },
+        "slickAreaKm2": { "type": "number" },
+        "confidenceScore": { "type": "number" },
+        "latitude": { "type": "number" },
+        "longitude": { "type": "number" },
+        "acknowledged": { "type": "boolean" },
+        "suspectedVessel": { "type": "string" }
+      },
+      "required": ["id", "alertCode", "timestamp", "severity", "sectorName", "satellite", "slickAreaKm2", "confidenceScore", "latitude", "longitude"]
+    },
+    "ForensicInvestigation": {
+      "title": "ForensicInvestigation",
+      "description": "Comprehensive SAR radar analysis and polluter attribution case dossier",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "region": { "type": "string" },
+        "satellite": { "type": "string" },
+        "centerLat": { "type": "number" },
+        "centerLng": { "type": "number" },
+        "slickAreaKm2": { "type": "number" },
+        "confidenceScore": { "type": "number" },
+        "primaryAttributedVessel": { "type": "string" },
+        "primaryAttributedMmsi": { "type": "string" },
+        "marpolViolation": { "type": "string" },
+        "status": { "type": "string" }
+      },
+      "required": ["id", "title", "createdAt", "region", "centerLat", "centerLng", "slickAreaKm2", "confidenceScore"]
+    },
+    "AlertDispatchRecord": {
+      "title": "AlertDispatchRecord",
+      "description": "Multi-channel tactical emergency notification record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "channel": { "type": "string" },
+        "recipient": { "type": "string" },
+        "status": { "type": "string" },
+        "sentAt": { "type": "string" },
+        "messageBody": { "type": "string" },
+        "carrierReceiptId": { "type": "string" }
+      },
+      "required": ["id", "channel", "recipient", "status", "sentAt"]
+    }
+  },
+  "firestore": {
+    "/alerts/{alertId}": {
+      "schema": "EarlyWarningAlert",
+      "description": "Collection of real-time satellite oil slick early warning alerts"
+    },
+    "/investigations/{investigationId}": {
+      "schema": "ForensicInvestigation",
+      "description": "Archived SAR investigation dossiers and attribution findings"
+    },
+    "/dispatches/{dispatchId}": {
+      "schema": "AlertDispatchRecord",
+      "description": "Audit trail of multi-channel emergency alert dispatches"
+    }
+  }
+}

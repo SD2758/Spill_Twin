@@ -38,6 +38,7 @@ import {
   UserCheck,
   Cast,
   MessageSquare,
+  Database,
 } from 'lucide-react';
 import {
   EarlyWarningAlert,
@@ -49,6 +50,11 @@ import { SURVEILLANCE_SECTORS } from '../data/surveillanceSectors';
 import { INITIAL_EARLY_WARNING_ALERTS } from '../data/initialAlerts';
 import { alertSoundService } from '../services/alertSound';
 import { OperatorAuthService } from '../services/operatorAuthService';
+import {
+  persistAlertToFirestore,
+  persistDispatchToFirestore,
+  fetchAlertsFromFirestore
+} from '../services/firebase';
 import { SatellitePowerBroadcastModal } from './SatellitePowerBroadcastModal';
 import { ResponseHistoryModal } from './ResponseHistoryModal';
 import { OperatorAuthModal } from './OperatorAuthModal';
@@ -129,21 +135,41 @@ export const EarlyWarningAlertSystem: React.FC<EarlyWarningAlertSystemProps> = (
     return true;
   });
 
-  // Fetch updated alerts from server
+  // Fetch updated alerts from server and sync with Cloud Firestore
   const fetchAlerts = async () => {
     try {
       const res = await fetch('/api/alerts/history');
       if (res.ok) {
         const json = await res.json();
         if (json.success && json.data) {
+          // Sync existing items to Firestore in background
+          json.data.slice(0, 5).forEach((item: EarlyWarningAlert) => {
+            persistAlertToFirestore(item).catch(() => {});
+          });
           setAlerts(json.data);
           if (!selectedAlert && json.data.length > 0) {
             setSelectedAlert(json.data[0]);
           }
         }
+      } else {
+        // Fallback to Cloud Firestore if server API is unreachable
+        const firestoreAlerts = await fetchAlertsFromFirestore(20);
+        if (firestoreAlerts.length > 0) {
+          setAlerts(firestoreAlerts);
+          if (!selectedAlert) setSelectedAlert(firestoreAlerts[0]);
+        }
       }
     } catch {
-      // Offline fallback
+      // Cloud Firestore direct query fallback
+      try {
+        const firestoreAlerts = await fetchAlertsFromFirestore(20);
+        if (firestoreAlerts.length > 0) {
+          setAlerts(firestoreAlerts);
+          if (!selectedAlert) setSelectedAlert(firestoreAlerts[0]);
+        }
+      } catch {
+        // Safe offline default
+      }
     }
   };
 
@@ -197,6 +223,9 @@ export const EarlyWarningAlertSystem: React.FC<EarlyWarningAlertSystemProps> = (
       if (res.ok) {
         const json = await res.json();
         if (json.success && json.alert) {
+          // Persist detected alert to Cloud Firestore database
+          persistAlertToFirestore(json.alert).catch(console.warn);
+
           setAlerts((prev) => [json.alert, ...prev.slice(0, 25)]);
           setSelectedAlert(json.alert);
 
@@ -326,6 +355,11 @@ export const EarlyWarningAlertSystem: React.FC<EarlyWarningAlertSystemProps> = (
               <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-cyan-950/60 text-cyan-300 border border-cyan-500/20">
                 <Globe className="w-3.5 h-3.5 text-cyan-400" />
                 <span>India EEZ & Global Strategic Chokepoints</span>
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-950/60 text-emerald-300 border border-emerald-500/30 font-mono">
+                <Database className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span>Cloud Firestore Active</span>
               </span>
             </div>
 

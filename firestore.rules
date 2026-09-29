@@ -1,0 +1,47 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Early warning alerts
+    match /alerts/{alertId} {
+      allow read: if true;
+      allow create, update: if isValidId(alertId)
+        && request.resource.data.keys().hasAll(['id', 'alertCode', 'timestamp', 'severity', 'sectorName', 'satellite', 'slickAreaKm2', 'confidenceScore', 'latitude', 'longitude'])
+        && request.resource.data.id is string
+        && request.resource.data.alertCode is string
+        && request.resource.data.latitude is number
+        && request.resource.data.longitude is number;
+      allow delete: if false;
+    }
+
+    // Forensic investigations
+    match /investigations/{investigationId} {
+      allow read: if true;
+      allow create, update: if isValidId(investigationId)
+        && request.resource.data.keys().hasAll(['id', 'title', 'createdAt', 'region', 'centerLat', 'centerLng', 'slickAreaKm2', 'confidenceScore'])
+        && request.resource.data.id is string
+        && request.resource.data.title is string
+        && request.resource.data.centerLat is number
+        && request.resource.data.centerLng is number;
+      allow delete: if false;
+    }
+
+    // Multi-channel tactical dispatch audit trail
+    match /dispatches/{dispatchId} {
+      allow read: if true;
+      allow create: if isValidId(dispatchId)
+        && request.resource.data.keys().hasAll(['id', 'channel', 'recipient', 'status', 'sentAt']);
+      allow update, delete: if false;
+    }
+
+    // Deny all other paths
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
