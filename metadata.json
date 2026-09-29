@@ -1,0 +1,6 @@
+{
+  "name": "SpillTwin - Satellite SAR Investigation System",
+  "description": "Satellite Synthetic Aperture Radar (SAR) marine oil spill detection, drift trajectory simulation, vessel source estimation, and uncertainty analysis engine.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
