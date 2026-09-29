@@ -1,8 +1,77 @@
-# 🌊 Autonomous Marine Traffic & Fairway Spill Coordination System
+# 🌊 SpillTwin: Autonomous Multimodal Maritime SAR & Spill Intelligence Platform
 
-A modern, high-fidelity maritime traffic simulation, hazard attribution, and emergency coordination platform built for narrow fairways and restricted coastal waterways.
+[![Live Demo](https://img.shields.io/badge/Live%20App-Online-success?style=for-the-badge&logo=google-cloud)](https://ais-pre-4w4r2ipytbpv667izax5bw-914087129082.asia-southeast1.run.app)
+[![Google Gemini](https://img.shields.io/badge/Google_Gemini-3.8_Flash-blue?style=for-the-badge&logo=google)](https://deepmind.google/technologies/gemini/)
+[![Firebase Firestore](https://img.shields.io/badge/Cloud_Firestore-Active-orange?style=for-the-badge&logo=firebase)](https://firebase.google.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
 
-The system features real-time 2D radar vector graphics, hydrodynamics wake envelope calculations, automated vessel-to-vessel (V2V) VHF/DSC distress broadcasting, marine oil terminal telemetry, MARPOL Annex I consignment reporting, and synchronized "broadcast everywhere" clearance workflows.
+> **🚀 Publicly Deployed Application Link:**  
+> **[https://ais-pre-4w4r2ipytbpv667izax5bw-914087129082.asia-southeast1.run.app](https://ais-pre-4w4r2ipytbpv667izax5bw-914087129082.asia-southeast1.run.app)**
+
+---
+
+### 📌 GitHub Repository Details (Copy & Paste)
+
+- **Repository Name:** `spilltwin-maritime-ai`
+- **Description:**  
+  *Autonomous spaceborne SAR radar oil spill intelligence, physics-informed hydrodynamic reverse backtracking, multimodal Gemini 3.8 Flash source attribution, and real-time emergency dispatch coordination.*
+- **Website Link:**  
+  `https://ais-pre-4w4r2ipytbpv667izax5bw-914087129082.asia-southeast1.run.app`
+- **Topics / Tags:**  
+  `gemini-api`, `multimodal-ai`, `synthetic-aperture-radar`, `maritime-safety`, `oil-spill-detection`, `sentinel-1`, `hydrodynamics`, `firestore`, `digital-twin`
+
+---
+
+## 💻 Quick Start: Run Locally
+
+### 1. Prerequisites
+- **Node.js**: v18.0.0 or higher (v20+ recommended)
+- **Package Manager**: `npm` (comes with Node) or `bun` / `pnpm`
+- **Git**
+
+### 2. Clone the Repository
+```bash
+git clone https://github.com/your-org/spilltwin-maritime-ai.git
+cd spilltwin-maritime-ai
+```
+
+### 3. Install Dependencies
+```bash
+npm install
+```
+
+### 4. Configure Environment Variables (Optional)
+Create a `.env` file in the root directory (based on `.env.example`):
+```bash
+cp .env.example .env
+```
+*(Optional) If you wish to use your own Gemini API key for real-time multimodal reasoning:*
+```env
+GEMINI_API_KEY=your_gemini_api_key_here
+PORT=3000
+```
+> *Note: The application includes native fallback synthesis models and pre-calibrated SAR satellite telemetry, so it runs completely out of the box even without external API keys.*
+
+### 5. Launch Development Server
+```bash
+npm run dev
+```
+Open **[http://localhost:3000](http://localhost:3000)** in your browser. The Vite frontend and Express full-stack proxy boot seamlessly on port 3000.
+
+### 6. Verify System Health
+You can verify the backend algorithms and satellite telemetry engine locally via:
+```bash
+curl http://localhost:3000/api/health
+```
+
+### 7. Production Build & Preview
+```bash
+# Build optimized production bundle
+npm run build
+
+# Start the full-stack server
+npm start
+```
 
 ---
 
@@ -211,7 +280,8 @@ npm run dev
 ```
 
 ### 4. Deployed Application Link
-- **Public URL**: Accessible live via the Google Cloud Run preview environment.
+- **Public URL**: [https://ais-pre-4w4r2ipytbpv667izax5bw-914087129082.asia-southeast1.run.app](https://ais-pre-4w4r2ipytbpv667izax5bw-914087129082.asia-southeast1.run.app)
+- **Status**: Live, publicly accessible, with Cloud Firestore persistence enabled.
 
 ### 5. 3-Minute Demo Video Script & Workflow
 - **Minute 0:00 - 1:00**: Ingest VHF Mayday audio in the Multimodal AI Intake Panel. Gemini parses coordinates and automatically invokes `spawnSpillAt()`, pinning an active casualty beacon on the tactical radar.
